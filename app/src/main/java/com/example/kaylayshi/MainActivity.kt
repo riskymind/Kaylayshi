@@ -24,6 +24,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.kaylayshi.data.DataSource
+import com.example.kaylayshi.data.Project
 import com.example.kaylayshi.ui.theme.KaylayshiTheme
 
 class MainActivity : ComponentActivity() {
@@ -66,7 +68,7 @@ fun CreateKaylayshiCard() {
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                CreateImageProfile()
+                CreateImageProfile(image = R.drawable.propix)
                 Divider()
                 CreateInfo()
 
@@ -101,17 +103,18 @@ fun PortFolioContent() {
             shape = RoundedCornerShape(corner = CornerSize(8.dp)),
             border = BorderStroke(2.dp, Color.LightGray)
         ) {
-            PortFolio(data = listOf("kele", "anth", "nkem", "zuri"))
+            PortFolio(data = DataSource.projects)
         }
     }
 }
 
 @Composable
-fun PortFolio(data: List<String>) {
+fun PortFolio(data: List<Project>) {
     LazyColumn {
         items(data) { item ->
             Card(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(14.dp),
                 shape = RectangleShape,
                 elevation = 4.dp
@@ -122,13 +125,13 @@ fun PortFolio(data: List<String>) {
                         .background(MaterialTheme.colors.surface)
                         .padding(6.dp)
                 ) {
-                    CreateImageProfile(modifier = Modifier.size(100.dp))
+                    CreateImageProfile(modifier = Modifier.size(100.dp), item.image)
                     Column(
                         modifier = Modifier
                             .padding(8.dp)
                             .align(CenterVertically)
                     ) {
-                        Text(text = item, fontWeight = FontWeight.Bold)
+                        Text(text = item.title, fontWeight = FontWeight.Bold)
                         Text(text = "A great project", style = MaterialTheme.typography.body2)
                     }
                 }
@@ -156,7 +159,7 @@ fun CreateInfo() {
 }
 
 @Composable
-fun CreateImageProfile(modifier: Modifier = Modifier) {
+fun CreateImageProfile(modifier: Modifier = Modifier, image: Int) {
     Surface(
         modifier = modifier
             .size(150.dp)
@@ -167,7 +170,7 @@ fun CreateImageProfile(modifier: Modifier = Modifier) {
         color = MaterialTheme.colors.onSurface.copy(alpha = 0.5f)
     ) {
         Image(
-            painter = painterResource(id = R.drawable.ic_launcher_background),
+            painter = painterResource(id = image),
             contentDescription = "Profile image",
             modifier = modifier.size(135.dp),
             contentScale = ContentScale.Crop
